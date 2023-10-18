@@ -38,58 +38,17 @@ async function pobierz() {
             const buttonminus = document.createElement("button");
             buttonminus.setAttribute("id", "minus");
             buttonminus.innerHTML = "-10";
-            buttonminus.addEventListener('click', async () => {
-                const obecna_cena = json[i].regular_price;
-                const cena_odejmij = parseFloat(obecna_cena) - 10
-
-                const params1 = {
-                    regular_price: cena_odejmij
-                };
-
-                console.log(params1);
-
-                const url = new URL(`http://192.168.8.191/wordpress/wp-json/wc/v3/products/${json[i].id}`);
-
-                for(let j in params1){
-                  url.searchParams.append(j, params1[j])
-                }
- 
-                const responsecena = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        authorization: `Basic ${btoa("mrbartek:B4rt3k20071024!@")}`
-                    },
-                });
-                window.location.reload()
-            });
+            buttonminus.addEventListener('click', () => {
+                zmien(json[i], false)
+            })
     
             const buttonplus = document.createElement("button");
             buttonplus.setAttribute("id", "plus");
             buttonplus.innerHTML = "+10";
-            buttonplus.addEventListener('click', async () => {
-                const obecna_cena = json[i].regular_price;
-                const cena_dodaj = parseFloat(obecna_cena) + 10
-
-                const params2 = {
-                    regular_price: cena_dodaj
-                };
-
-                console.log(params2);
-
-                const url = new URL(`http://192.168.8.191/wordpress/wp-json/wc/v3/products/${json[i].id}`);
-
-                for(let j in params2){
-                  url.searchParams.append(j, params2[j])
-                }
- 
-                const responsecenaplus = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        authorization: `Basic ${btoa("mrbartek:B4rt3k20071024!@")}`
-                    },
-                });
-                window.location.reload()
-            });
+            buttonplus.addEventListener('click', () => {
+                zmien(json[i], true)
+            })
+                
 
             goragora.innerHTML = json[i].name;
             srodek.innerHTML = json[i].price + " dolarów.";
@@ -106,3 +65,32 @@ async function pobierz() {
 }
 pobierz()
 
+async function zmien(json, stan){
+    let params = {}
+    if(stan == false){
+        const obecna_cena = json.regular_price;
+        const cena_odejmij = parseFloat(obecna_cena) - 10
+        params = {
+            regular_price: cena_odejmij
+        }
+    }else{
+        const obecna_cena = json.regular_price;
+        const cena_dodaj = parseFloat(obecna_cena) + 10
+        params = {
+            regular_price: cena_dodaj
+        }
+    }
+                const url = new URL(`http://192.168.8.191/wordpress/wp-json/wc/v3/products/${json.id}`);
+
+                for(let i in params){
+                  url.searchParams.append(i, params[i])
+                }
+ 
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        authorization: `Basic ${btoa("mrbartek:B4rt3k20071024!@")}`
+                    },
+                });
+                window.location.reload()
+}
