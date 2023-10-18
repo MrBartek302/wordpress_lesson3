@@ -80,17 +80,15 @@ async function zmien(json, stan){
             regular_price: cena_dodaj
         }
     }
-                const url = new URL(`http://192.168.8.191/wordpress/wp-json/wc/v3/products/${json.id}`);
-
-                for(let i in params){
-                  url.searchParams.append(i, params[i])
-                }
- 
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        authorization: `Basic ${btoa("mrbartek:B4rt3k20071024!@")}`
-                    },
-                });
-                window.location.reload()
+        const url = new URL(`http://192.168.8.191/wordpress/wp-json/wc/v3/products/${json.id}`)
+        for(let i in params){
+          url.searchParams.append(i, params[i])
+        }
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                authorization: `Basic ${btoa("mrbartek:B4rt3k20071024!@")}`
+            },
+        });
+        window.location.reload()
 }
