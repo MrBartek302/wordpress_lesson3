@@ -1,7 +1,7 @@
 var json = [];
 
 async function pobierz() {
-    const url = new URL('http://192.168.214.114/wordpress/wp-json/wc/v3/products');
+    const url = new URL('http://192.168.8.191/wordpress/wp-json/wc/v3/products');
     
     const response = await fetch(url, {
         method: 'GET',
@@ -16,7 +16,7 @@ async function pobierz() {
 
     if (json.length > 0) {
         for (let i in json) {
-            const miejsce = document.getElementById("ogol");
+            const miejsce = document.querySelector("#ogol");
             const divkom = document.createElement("div");
             divkom.classList.add("divik");
     
@@ -24,7 +24,7 @@ async function pobierz() {
             goragora.setAttribute("id", `goragora`);
     
             const srodek = document.createElement("div");
-            srodek.setAttribute("id", `srodek`);
+            srodek.setAttribute("id", `srodek${i}`);
     
             const dol = document.createElement("div");
             dol.setAttribute("id", "dol");
@@ -39,26 +39,35 @@ async function pobierz() {
             buttonminus.setAttribute("id", "minus");
             buttonminus.innerHTML = "-10";
             buttonminus.addEventListener('click', () => {
-                zmien(json[i], false)
+                const miejsce = document.querySelector(`#srodek${i}`)
+                const obecnaCena = parseFloat(miejsce.innerHTML);
+                const cenaOdejmij = obecnaCena - 10;
+                miejsce.innerHTML = cenaOdejmij.toString();
             })
     
             const buttonplus = document.createElement("button");
             buttonplus.setAttribute("id", "plus");
             buttonplus.innerHTML = "+10";
             buttonplus.addEventListener('click', () => {
-                zmien(json[i], true)
+                const miejsce = document.querySelector(`#srodek${i}`)
+                const obecnaCena = parseFloat(miejsce.innerHTML);
+                const cenaDodaj = obecnaCena + 10;
+                miejsce.innerHTML = cenaDodaj.toString();
             })
 
             const buttonwyslij = document.createElement("button");
-            buttonwyslij.setAttribute("id", "plus");
+            buttonwyslij.setAttribute("id", "send");
             buttonwyslij.innerHTML = "Zatwierzdź";
             buttonwyslij.addEventListener('click', () => {
-                zmien(json[i])
+                const joool = document.querySelector(`#srodek${i}`)
+                const wartosc = joool.innerHTML
+                console.log(wartosc)
+                zmien(json[i], wartosc)
             })
                 
 
             goragora.innerHTML = json[i].name;
-            srodek.innerHTML = json[i].price + " dolarów.";
+            srodek.innerHTML = json[i].price;
             dollewo.appendChild(buttonminus);
             dolprawo.appendChild(buttonplus);
             dolprawo.appendChild(buttonwyslij);
@@ -73,22 +82,14 @@ async function pobierz() {
 }
 pobierz()
 
-async function zmien(json, stan){
+async function zmien(json, wartosc1){
     let params = {}
-    if(stan == false){
-        const obecna_cena = json.regular_price;
-        const cena_odejmij = parseFloat(obecna_cena) - 10
-        params = {
-            regular_price: cena_odejmij
-        }
-    }else{
-        const obecna_cena = json.regular_price;
-        const cena_dodaj = parseFloat(obecna_cena) + 10
-        params = {
-            regular_price: cena_dodaj
-        }
+    const wartosc = wartosc1
+    params={
+        regular_price: wartosc
     }
-        const url = new URL(`http://192.168.214.114/wordpress/wp-json/wc/v3/products/${json.id}`)
+    
+        const url = new URL(`http://192.168.8.191/wordpress/wp-json/wc/v3/products/${json.id}`)
         for(let i in params){
           url.searchParams.append(i, params[i])
         }
