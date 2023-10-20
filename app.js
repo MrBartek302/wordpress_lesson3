@@ -1,7 +1,7 @@
 var json = [];
 
 async function pobierz() {
-    const url = new URL('http://192.168.8.191/wordpress/wp-json/wc/v3/products');
+    const url = new URL('http://192.168.214.114/wordpress/wp-json/wc/v3/products');
     
     const response = await fetch(url, {
         method: 'GET',
@@ -48,12 +48,20 @@ async function pobierz() {
             buttonplus.addEventListener('click', () => {
                 zmien(json[i], true)
             })
+
+            const buttonwyslij = document.createElement("button");
+            buttonwyslij.setAttribute("id", "plus");
+            buttonwyslij.innerHTML = "Zatwierzdź";
+            buttonwyslij.addEventListener('click', () => {
+                zmien(json[i])
+            })
                 
 
             goragora.innerHTML = json[i].name;
             srodek.innerHTML = json[i].price + " dolarów.";
             dollewo.appendChild(buttonminus);
             dolprawo.appendChild(buttonplus);
+            dolprawo.appendChild(buttonwyslij);
             divkom.appendChild(goragora);
             divkom.appendChild(srodek);
             divkom.appendChild(dol);
@@ -80,7 +88,7 @@ async function zmien(json, stan){
             regular_price: cena_dodaj
         }
     }
-        const url = new URL(`http://192.168.8.191/wordpress/wp-json/wc/v3/products/${json.id}`)
+        const url = new URL(`http://192.168.214.114/wordpress/wp-json/wc/v3/products/${json.id}`)
         for(let i in params){
           url.searchParams.append(i, params[i])
         }
